@@ -69,17 +69,27 @@
         const dt={leavecity,goingcity,departingdate,returningdate,adultqty,childrenqty,infantsqty,travelclass}
        
         alert('clicked');
+        console.log(JSON.stringify(dt))
         $.ajax({
         type: "POST",
         url: "/searchflights",
-        body: dt,
+        
+        body: {
+            "leavecity" : leavecity,
+            "goingcity": goingcity,
+            "departindate" : departingdate,
+            "returningdate" : returningdate,
+            "adultqty" : adultqty,
+        },
         contentType: 'application/json',
+      
         success: function(response) {
-               alert("success!");
+               alert("success!"); 
                console.log(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {
                 alert("error");
+                alert(errorThrown);
         },
     });
     }
