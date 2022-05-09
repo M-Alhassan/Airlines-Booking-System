@@ -10,9 +10,6 @@ export default class SearchFlights extends Component {
             goingto :  "",
             departing : "",
             returning : "",
-            adults : 0,
-            children : 0,
-            infants : 0,
             travelClass  :"",
             triptype : ""
         }
@@ -93,7 +90,7 @@ export default class SearchFlights extends Component {
                 id="departingdate"
               />
             </div>
-            {this.state.oneway===true? "" : <div className="input-grp">
+            {this.state.oneway===true? <div></div> : <div className="input-grp">
               <label>Returning</label>
               <input
                 type="date"
@@ -104,46 +101,18 @@ export default class SearchFlights extends Component {
               />
             </div>}
             
-            <div className="input-grp">
-              <label>Adults</label>
-              <input
-                type="number"
-                name="adults"
-                onChange={this.handleData}
-                className="form-control"
-                id="adultqty"
-              />
-            </div>
-            <div className="input-grp">
-              <label>Children</label>
-              <input
-                type="number"
-                name="children"
-                onChange={this.handleData}
-                className="form-control"
-                id="childrenqty"
-              />
-            </div>
-            <div className="input-grp">
-              <label>Infants</label>
-              <input
-                type="number"
-                name="infants"
-                onChange={this.handleData}
-                className="form-control"
-                id="infantsqty"
-              />
-            </div>
+            
+        
             <div className="input-grp">
               <label>Travel className</label>
               <select className="custom-select" id="travelclass"  name="travelClass"
               onChange={this.handleData}>
-                <option value="Economy className" name="travelClass"
-              onChange={this.handleData}>Economy className</option>
-                <option value="Business className" name="travelClass"
-              onChange={this.handleData}>Business className</option>
-                <option value="First className"  name="travelClass"
-              onChange={this.handleData}>First className</option>
+                <option value="Economy class" name="travelClass"
+              onChange={this.handleData}>Economy class</option>
+                <option value="Business class" name="travelClass"
+              onChange={this.handleData}>Business class</option>
+                <option value="First class"  name="travelClass"
+              onChange={this.handleData}>First class</option>
               </select>
             </div>
             <div className="input-grp show-flights">

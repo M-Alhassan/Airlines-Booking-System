@@ -1,113 +1,117 @@
-CREATE DATABASE `Airlines`;
-
-CREATE TABLE `Admin` (
-  `AdminFname` varchar(25) NOT NULL,
-  `AdminLname` varchar(25) NOT NULL,
-  `AdminId` int NOT NULL,
-  `NewAttribute` int NOT NULL,
-  PRIMARY KEY (`AdminId`)
+CREATE TABLE Passenger
+(
+  PassengerID CHAR(10) NOT NULL,
+  DOB DATE NOT NULL,
+  FirstName VARCHAR(32) NOT NULL,
+  LastName VARCHAR(32) NOT NULL,
+  Email VARCHAR(50) NOT NULL,
+  Password VARCHAR(26) NOT NULL,
+  PhoneNumber CHAR(10) NOT NULL,
+  PRIMARY KEY (PassengerID)
 );
 
-CREATE TABLE `Aircraft` (
-  `LastMaintenance` date NOT NULL,
-  `FirstFlightDate` date NOT NULL,
-  `NextMaintenance` date NOT NULL,
-  `TotalSeats` int NOT NULL,
-  `AircraftID` int NOT NULL,
-  `SeatNum` char(3) NOT NULL,
-  PRIMARY KEY (`AircraftID`),
-  KEY `SeatNum` (`SeatNum`),
-  CONSTRAINT `aircraft_ibfk_1` FOREIGN KEY (`SeatNum`) REFERENCES `Seats` (`SeatNum`)
+CREATE TABLE CreditCard
+(
+  CardNum INT NOT NULL,
+  PassengerID CHAR(10),
+  PRIMARY KEY (CardNum),
+  FOREIGN KEY (PassengerID) REFERENCES Passenger(PassengerID)
 );
 
-CREATE TABLE `AirlinesSystem` (
-  `SeatNum` char(3) NOT NULL,
-  `TicketNum` char(5) NOT NULL,
-  `CancelTicketNum` char(5) NOT NULL,
-  KEY `SeatNum` (`SeatNum`),
-  KEY `TicketNum` (`TicketNum`),
-  KEY `CancelTicketNum` (`CancelTicketNum`),
-  CONSTRAINT `airlinessystem_ibfk_1` FOREIGN KEY (`SeatNum`) REFERENCES `FirstClass` (`SeatNum`),
-  CONSTRAINT `airlinessystem_ibfk_2` FOREIGN KEY (`SeatNum`) REFERENCES `Business` (`SeatNum`),
-  CONSTRAINT `airlinessystem_ibfk_3` FOREIGN KEY (`SeatNum`) REFERENCES `Economy` (`SeatNum`),
-  CONSTRAINT `airlinessystem_ibfk_4` FOREIGN KEY (`TicketNum`) REFERENCES `Ticket` (`TicketNum`),
-  CONSTRAINT `airlinessystem_ibfk_5` FOREIGN KEY (`CancelTicketNum`) REFERENCES `Ticket` (`TicketNum`)
+CREATE TABLE Seat
+(
+  SeatNumber INT NOT NULL,
+  Status VARCHAR(10) NOT NULL,
+  PRIMARY KEY (SeatNumber)
 );
 
-CREATE TABLE `Business` (
-  `SeatNum` char(3) NOT NULL,
-  PRIMARY KEY (`SeatNum`),
-  CONSTRAINT `business_ibfk_1` FOREIGN KEY (`SeatNum`) REFERENCES `Seats` (`SeatNum`)
+CREATE TABLE FirstClass
+(
+  FirstClassPrice INT NOT NULL,
+  SeatNumber INT NOT NULL,
+  PRIMARY KEY (SeatNumber),
+  FOREIGN KEY (SeatNumber) REFERENCES Seat(SeatNumber)
 );
 
-CREATE TABLE `Economy` (
-  `SeatNum` char(3) NOT NULL,
-  PRIMARY KEY (`SeatNum`),
-  CONSTRAINT `economy_ibfk_1` FOREIGN KEY (`SeatNum`) REFERENCES `Seats` (`SeatNum`)
-);
- 
- CREATE TABLE `FirstClass` (
-  `SeatNum` char(3) NOT NULL,
-  PRIMARY KEY (`SeatNum`),
-  CONSTRAINT `firstclass_ibfk_1` FOREIGN KEY (`SeatNum`) REFERENCES `Seats` (`SeatNum`)
+CREATE TABLE Business
+(
+  BusinessPrice INT NOT NULL,
+  SeatNumber INT NOT NULL,
+  PRIMARY KEY (SeatNumber),
+  FOREIGN KEY (SeatNumber) REFERENCES Seat(SeatNumber)
 );
 
-CREATE TABLE `Flight` (
-  `Date` date NOT NULL,
-  `Destination` varchar(25) NOT NULL,
-  `SourceCity` varchar(25) NOT NULL,
-  `FlightNum` char(5) NOT NULL,
-  PRIMARY KEY (`FlightNum`)
+CREATE TABLE Economy
+(
+  EconomyPrice INT NOT NULL,
+  SeatNumber INT NOT NULL,
+  PRIMARY KEY (SeatNumber),
+  FOREIGN KEY (SeatNumber) REFERENCES Seat(SeatNumber)
 );
 
-CREATE TABLE `Passenger` (
-  `Fname` varchar(25) NOT NULL,
-  `Lname` varchar(25) NOT NULL,
-  `ID` int NOT NULL,
-  `DOBirth` date NOT NULL,
-  `PhoneNum` int NOT NULL,
-  `Email` varchar(32) NOT NULL,
-  `FlightNum` char(5) DEFAULT NULL,
-  `TicketNum` char(5) NOT NULL,
-  `SeatNum` char(3) NOT NULL,
-  `ReuseTicketNum` char(5) NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `FlightNum` (`FlightNum`),
-  KEY `TicketNum` (`TicketNum`),
-  KEY `SeatNum` (`SeatNum`),
-  KEY `ReuseTicketNum` (`ReuseTicketNum`),
-  CONSTRAINT `passenger_ibfk_1` FOREIGN KEY (`FlightNum`) REFERENCES `Flight` (`FlightNum`),
-  CONSTRAINT `passenger_ibfk_2` FOREIGN KEY (`TicketNum`) REFERENCES `Ticket` (`TicketNum`),
-  CONSTRAINT `passenger_ibfk_3` FOREIGN KEY (`SeatNum`) REFERENCES `Seats` (`SeatNum`),
-  CONSTRAINT `passenger_ibfk_4` FOREIGN KEY (`ReuseTicketNum`) REFERENCES `Ticket` (`TicketNum`)
+CREATE TABLE Admin
+(
+  AdminID CHAR(10) NOT NULL,
+  AdminFirstName VARCHAR(32) NOT NULL,
+  AdminLastName VARCHAR(32) NOT NULL,
+  AdminPassword VARCHAR(26) NOT NULL,
+  PRIMARY KEY (AdminID)
 );
 
-CREATE TABLE `Payment` (
-  `CardNum` int NOT NULL,
-  `ID` int NOT NULL,
-  PRIMARY KEY (`CardNum`),
-  KEY `ID` (`ID`),
-  CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `Passenger` (`ID`)
+CREATE TABLE Aircraft
+(
+  FirstFlightDate DATE NOT NULL,
+  AircraftID CHAR(10) NOT NULL,
+  NumberOfSeats INT,
+  LastMaintenance DATE,
+  NextMaintenance DATE,
+  AircraftType VARCHAR(32) NOT NULL,
+  SeatNumber INT,
+  PRIMARY KEY (AircraftID),
+  FOREIGN KEY (SeatNumber) REFERENCES Seat(SeatNumber)
 );
 
-CREATE TABLE `Seats` (
-  `SeatNum` char(3) NOT NULL,
-  `Price` int NOT NULL,
-  `Status` varchar(10) NOT NULL,
-  PRIMARY KEY (`SeatNum`)
+CREATE TABLE Flight
+(
+  FlightNum CHAR(5) NOT NULL,
+  Date DATE NOT NULL,
+  Time CHAR(5) NOT NULL,
+  SourceCity VARCHAR(58) NOT NULL,
+  DestinationCity VARCHAR(58) NOT NULL,
+  AircraftID CHAR(10) NOT NULL,
+  PRIMARY KEY (FlightNum),
+  FOREIGN KEY (AircraftID) REFERENCES Aircraft(AircraftID)
 );
 
-CREATE TABLE `Ticket` (
-  `TicketNum` char(5) NOT NULL,
-  `FlightDate` date NOT NULL,
-  `Weight` int NOT NULL,
-  `Time` char(5) NOT NULL,
-  `SeatNum` char(3) NOT NULL,
-  PRIMARY KEY (`TicketNum`),
-  KEY `SeatNum` (`SeatNum`),
-  CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`SeatNum`) REFERENCES `Seats` (`SeatNum`)
+CREATE TABLE Ticket
+(
+  TicketNumber CHAR(5) NOT NULL,
+  BagWeight INT,
+  FlightNum CHAR(5) NOT NULL,
+  SeatNumber INT NOT NULL,
+  PassengerID CHAR(10) NOT NULL,
+  PRIMARY KEY (TicketNumber),
+  FOREIGN KEY (FlightNum) REFERENCES Flight(FlightNum),
+  FOREIGN KEY (SeatNumber) REFERENCES Seat(SeatNumber),
+  FOREIGN KEY (PassengerID) REFERENCES Passenger(PassengerID)
 );
 
+CREATE TABLE Manages
+(
+  AdminID CHAR(10) NOT NULL,
+  TicketNumber CHAR(5) NOT NULL,
+  PRIMARY KEY (AdminID),
+  FOREIGN KEY (AdminID) REFERENCES Admin(AdminID),
+  FOREIGN KEY (TicketNumber) REFERENCES Ticket(TicketNumber)
+);
 
-
-
+CREATE TABLE BookingInformation
+(
+  BookingStatus VARCHAR(10) NOT NULL,
+  CancelationFine INT,
+  PassengerID CHAR(10) NOT NULL,
+  TicketNumber CHAR(5) NOT NULL,
+  PRIMARY KEY (PassengerID, TicketNumber),
+  FOREIGN KEY (PassengerID) REFERENCES Passenger(PassengerID),
+  FOREIGN KEY (TicketNumber) REFERENCES Ticket(TicketNumber)
+);

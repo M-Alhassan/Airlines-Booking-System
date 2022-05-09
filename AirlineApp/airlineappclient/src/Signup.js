@@ -31,7 +31,12 @@ export default class Signup extends Component {
             body: JSON.stringify(this.state)
         })
         .then((res)=>res.json())
-        .then(res => console.log(res))
+        .then(res => {console.log(res);
+        if(res.ok === true){
+            alert("Successfully resgistered");
+            window.location.href = '/'
+        }
+        })
     }
   render() {
     

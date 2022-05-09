@@ -1,0 +1,26 @@
+.sidebar{
+    flex: 1;
+   height: calc(100vh - 50px);
+    /*max-height: 100%;*/
+    background-color : #1d252d;
+    padding : 5px;
+}
+.sidebar-list
+{
+    list-style-type: none;
+}
+.sidebar-listitem{
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 2px;
+    
+}
+
+.sidebar-listitem a {
+text-decoration: none;
+color: white;
+}
+
+.sidebar-listitem.active,.sidebar-listitem:hover{
+    background-color: #ffffff3b;
+} 

@@ -22,7 +22,17 @@ export default class Login extends Component {
             body: JSON.stringify(this.state)
         })
         .then((res)=>res.json())
-        .then(res => console.log(res))
+        .then(res => {console.log(res);
+        if(res.status == 1){
+            console.log(res.tokenID)
+            localStorage.setItem("tokenID", res.tokenID[0].passengerid)
+            console.log(localStorage.getItem("tokenID"))
+            alert("login success, redirecting to homepage");
+            window.location.href = '/home'
+        } else if (res.status == 0) {
+            alert("incorrect email or password")
+        }
+        })
     }
   render() {
     return (

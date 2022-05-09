@@ -1,0 +1,9 @@
+.content-container
+{
+    display: flex;
+}
+.otherPage{
+    flex: 4;
+    background-color: #f4f4f4;
+    padding : 60px;
+}
