@@ -8,14 +8,26 @@ export default class AdminPassenger extends Component {
     {
       this.state = {
         data: [],
+        email: ""
       };
     }
   }
   fetchData = () => {};
 
+  
+  onChangeHandler=(evt)=>{
+      this.setState({
+          [evt.target.name] : evt.target.value
+      })
+      console.log(this.state)
+    }
+
+
   componentDidMount() {
     fetch("/getflights", {
       method: "get",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(this.state)
     })
       .then((res) => res.json())
       .then((res) => {
@@ -41,7 +53,7 @@ export default class AdminPassenger extends Component {
                       Enter Passenger Email
                     </label>
                     <br></br>
-                    <input type="email" name="email" placeholder="Email" />
+                    <input type="email" name="email" placeholder="Email" onChange={this.onChangeHandler} />
                     {this.state.data.map((record) => (
                       <div>
                         <br></br>

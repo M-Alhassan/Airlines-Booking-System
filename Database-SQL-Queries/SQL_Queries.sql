@@ -1,10 +1,12 @@
+################################################################## Initialize Tables ##################################################################
+
 CREATE TABLE Passenger
 (
   PassengerID CHAR(10) NOT NULL,
   DOB DATE NOT NULL,
   FirstName VARCHAR(32) NOT NULL,
   LastName VARCHAR(32) NOT NULL,
-  Email VARCHAR(50) NOT NULL,
+  Email VARCHAR(50) NOT NULL UNIQUE,
   Password VARCHAR(26) NOT NULL,
   PhoneNumber CHAR(10) NOT NULL,
   PRIMARY KEY (PassengerID)
@@ -115,3 +117,41 @@ CREATE TABLE BookingInformation
   FOREIGN KEY (PassengerID) REFERENCES Passenger(PassengerID),
   FOREIGN KEY (TicketNumber) REFERENCES Ticket(TicketNumber)
 );
+
+################################################################### Back-end Queries ##################################################################
+
+#insert user info (sign up)
+INSERT INTO Passenger (FirstName, LastName, DOB, PhoneNumber, Email, PassengerID, Password) Values ($1, $2, $3, $4, $5, $6, $7)
+
+#fetch the user email and password (login) note: the ID is used to store in browser cookies to keep user logged in
+SELECT email, password, passengerid FROM passenger WHERE email = ${email}  AND Password = ${password}
+
+#fetch the admin ID and password (login)
+SELECT adminid, adminpassword FROM Passenger WHERE Email = ${adminID}  AND Password = ${adminPassword}
+
+#display all of the user's tickets
+SELECT * FROM (SELECT * FROM ticket JOIN flight ON ticket.flightnum = flight.flightnum AND passengerid = ${passengerid}) AS dt
+
+#display all of the user's (active tickets/ confirmed payments)
+SELECT * FROM (SELECT * FROM ticket JOIN flight ON ticket.flightnum = flight.flightnum AND passengerid = ${passengerid}) AS dt
+WHERE flightNum = (SELECT flightNum FROM bookingInformation WHERE status = 'confirmed')
+
+#display all of the user's (active tickets/ confirmed payments)
+SELECT * FROM (SELECT * FROM ticket JOIN flight ON ticket.flightnum = flight.flightnum AND passengerid = ${passengerid}) AS dt
+WHERE flightNum = (SELECT flightNum FROM bookingInformation WHERE status = 'canceled')
+
+#add a new aircraft
+INSERT INTO aircraft VALUES (${firstFlightDate}, ${aircraftID},${countSeats()}} , ${lastMaintenance}, ${nextMaintenance}, ${aircraftType}, NULL);
+
+#add a new flight										
+INSERT INTO flight VALUES (${flightNum}, ${flightDate},${flightTime}, ${srcCity}, ${dstCity}, ${aircraftID});
+
+#add a new ticket
+INSERT INTO tickets VALUES (${ticketID}, ${baggageWeight}, ${flightNum}, ${seatNum}, ${passengerID});
+
+#display all (active tickets/ confirmed payments)
+SELECT * FROM flight WHERE flightNum = (SELECT flightNum FROM bookingInformation WHERE status = 'confirmed');
+
+#display all canceled tickets
+SELECT * FROM flight WHERE flightNum = (SELECT flightNum FROM bookingInformation WHERE status = 'canceled');
+
